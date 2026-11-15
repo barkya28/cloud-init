@@ -7,17 +7,17 @@ from tests.conftest import UnexpectedSubpError
 class TestDisableSubpUsage:
     """Test that the disable_subp_usage fixture behaves as expected."""
 
-    def test_using_subp_raises_assertion_error(self):
+    def test_using_subp_raises_assertion_error(self) -> None:
         with pytest.raises(UnexpectedSubpError):
             subp.subp(["some", "args"])
 
-    def test_typeerrors_on_incorrect_usage(self):
+    def test_typeerrors_on_incorrect_usage(self) -> None:
         with pytest.raises(TypeError):
             # We are intentionally passing no value for a parameter, so:
             #  pylint: disable=no-value-for-parameter
-            subp.subp()
+            subp.subp()  # type: ignore[call-arg]
 
-    def test_subp_exception_escapes_exception_handling(self):
+    def test_subp_exception_escapes_exception_handling(self) -> None:
         with pytest.raises(UnexpectedSubpError):
             try:
                 subp.subp(["some", "args"])
@@ -25,11 +25,11 @@ class TestDisableSubpUsage:
                 pytest.fail("Unexpected exception raised")
 
     @pytest.mark.allow_all_subp
-    def test_subp_usage_can_be_reenabled(self):
+    def test_subp_usage_can_be_reenabled(self) -> None:
         subp.subp(["whoami"])
 
     @pytest.mark.allow_subp_for("whoami")
-    def test_subp_usage_can_be_conditionally_reenabled(self):
+    def test_subp_usage_can_be_conditionally_reenabled(self) -> None:
         # The two parameters test each potential invocation with a single
         # argument
         with pytest.raises(UnexpectedSubpError) as excinfo:
@@ -38,7 +38,9 @@ class TestDisableSubpUsage:
         subp.subp(["whoami"])
 
     @pytest.mark.allow_subp_for("whoami", "sh")
-    def test_subp_usage_can_be_conditionally_reenabled_for_multiple_cmds(self):
+    def test_subp_usage_can_be_conditionally_reenabled_for_multiple_cmds(
+        self,
+    ) -> None:
         with pytest.raises(UnexpectedSubpError) as excinfo:
             subp.subp(["some", "args"])
         assert "allowed: whoami,sh" in str(excinfo.value)
@@ -47,6 +49,6 @@ class TestDisableSubpUsage:
 
     @pytest.mark.allow_all_subp
     @pytest.mark.allow_subp_for("sh")
-    def test_both_marks_raise_an_error(self):
+    def test_both_marks_raise_an_error(self) -> None:
         with pytest.raises(UnexpectedSubpError, match="marked both"):
             subp.subp(["sh"])
