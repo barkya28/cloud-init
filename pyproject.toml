@@ -121,7 +121,6 @@ module = [
     "tests.unittests.test__init__",
     "tests.unittests.test_apport",
     "tests.unittests.test_builtin_handlers",
-    "tests.unittests.test_conftest",
     "tests.unittests.test_ds_identify",
     "tests.unittests.test_helpers",
     "tests.unittests.test_merging",
